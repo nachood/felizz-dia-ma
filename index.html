@@ -1,0 +1,470 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <meta name="theme-color" content="#f8e9df" />
+  <title>Para mamá, con todo mi amor</title>
+  <style>
+    :root {
+      --ink: #5e3f3c;
+      --muted: #8d6761;
+      --rose: #d96878;
+      --rose-dark: #b64d62;
+      --peach: #f8e9df;
+      --paper: #fffaf4;
+      --thread: #c86776;
+      --shadow: 0 18px 50px rgba(109, 70, 65, .17);
+    }
+
+    * { box-sizing: border-box; }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      margin: 0;
+      min-width: 320px;
+      color: var(--ink);
+      background:
+        radial-gradient(circle at 10% 12%, rgba(255,255,255,.7) 0 2px, transparent 3px),
+        radial-gradient(circle at 85% 28%, rgba(255,255,255,.45) 0 2px, transparent 3px),
+        linear-gradient(135deg, #f5ded7 0%, #f8e9df 48%, #f4d8d5 100%);
+      background-size: 28px 28px, 36px 36px, auto;
+      font-family: Georgia, "Times New Roman", serif;
+      overflow-x: hidden;
+    }
+
+    .page {
+      width: min(100% - 28px, 680px);
+      margin: 0 auto;
+      padding: 22px 0 52px;
+      position: relative;
+    }
+
+    .top-note {
+      text-align: center;
+      color: var(--muted);
+      font: 700 .78rem/1.2 system-ui, sans-serif;
+      letter-spacing: .16em;
+      text-transform: uppercase;
+      margin: 3px 0 15px;
+    }
+
+    .hero {
+      text-align: center;
+      position: relative;
+      padding: 16px 8px 31px;
+    }
+
+    .hero::after {
+      content: "";
+      position: absolute;
+      left: 7%;
+      right: 7%;
+      bottom: 0;
+      height: 2px;
+      background: repeating-linear-gradient(90deg, var(--thread) 0 13px, transparent 13px 21px);
+      opacity: .65;
+    }
+
+    .machine {
+      display: inline-block;
+      font-size: clamp(3.2rem, 16vw, 5.8rem);
+      line-height: .85;
+      filter: drop-shadow(0 8px 5px rgba(120, 73, 70, .12));
+      transform: rotate(-4deg);
+      margin-bottom: 15px;
+    }
+
+    h1 {
+      margin: 0;
+      font-size: clamp(2.05rem, 9vw, 3.6rem);
+      line-height: .98;
+      color: var(--rose-dark);
+      font-weight: 700;
+    }
+
+    .subtitle {
+      margin: 14px auto 0;
+      max-width: 390px;
+      color: var(--muted);
+      font-size: 1.05rem;
+      font-style: italic;
+      line-height: 1.5;
+    }
+
+    .letter {
+      position: relative;
+      margin-top: 28px;
+      padding: clamp(27px, 7vw, 52px) clamp(22px, 7vw, 58px);
+      background: var(--paper);
+      box-shadow: var(--shadow);
+      border-radius: 4px;
+      isolation: isolate;
+    }
+
+    .letter::before {
+      content: "";
+      position: absolute;
+      inset: 10px;
+      border: 2px dashed rgba(200,103,118,.42);
+      border-radius: 2px;
+      pointer-events: none;
+      z-index: -1;
+    }
+
+    .letter::after {
+      content: "🧵";
+      position: absolute;
+      top: -21px;
+      right: 20px;
+      display: grid;
+      place-items: center;
+      width: 43px;
+      height: 43px;
+      background: #fff4ee;
+      border-radius: 50%;
+      box-shadow: 0 5px 14px rgba(109,70,65,.15);
+      font-size: 1.48rem;
+      transform: rotate(9deg);
+    }
+
+    .salutation {
+      margin: 0 0 23px;
+      color: var(--rose-dark);
+      font-size: 1.45rem;
+      font-weight: 700;
+    }
+
+    .letter p {
+      margin: 0 0 19px;
+      font-size: clamp(1.06rem, 4.4vw, 1.22rem);
+      line-height: 1.72;
+    }
+
+    .signature {
+      margin-top: 30px !important;
+      margin-bottom: 0 !important;
+      text-align: right;
+      color: var(--rose-dark);
+      font-style: italic;
+      font-weight: 700;
+    }
+
+    .letter-step {
+      display: none;
+    }
+
+    .letter-step.active {
+      display: block;
+      animation: letterFade .7s ease both;
+    }
+
+    .next-area {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+      margin-top: 28px;
+      padding-top: 19px;
+      border-top: 1px solid rgba(200,103,118,.22);
+    }
+
+    .progress {
+      color: var(--muted);
+      font: .78rem/1.2 system-ui, sans-serif;
+      letter-spacing: .08em;
+    }
+
+    .next-button {
+      appearance: none;
+      border: 1px solid rgba(182,77,98,.2);
+      border-radius: 999px;
+      padding: 12px 20px;
+      color: var(--rose-dark);
+      background: #fff4ee;
+      box-shadow: 0 5px 14px rgba(109,70,65,.1);
+      font: 700 1rem Georgia, serif;
+      cursor: pointer;
+      touch-action: manipulation;
+      transition: transform .15s ease, background .15s ease;
+    }
+
+    .next-button:active { transform: scale(.95); background: #fbe6e2; }
+    .next-button:focus-visible { outline: 3px solid #6f9da0; outline-offset: 3px; }
+
+    .photo-section[hidden],
+    .love-area[hidden] { display: none; }
+
+    .photo-section.reveal,
+    .love-area.reveal { animation: fadeUp .9s ease both; }
+
+    .photo-section {
+      text-align: center;
+      padding-top: 43px;
+    }
+
+    .photo-section h2 {
+      margin: 0 0 18px;
+      font-size: 1.65rem;
+      color: var(--rose-dark);
+    }
+
+    .photo-frame {
+      width: min(100%, 470px);
+      margin: 0 auto;
+      padding: 10px;
+      background: #fffaf4;
+      box-shadow: var(--shadow);
+      transform: rotate(1.2deg);
+      position: relative;
+    }
+
+    .photo-frame::before,
+    .photo-frame::after {
+      content: "";
+      position: absolute;
+      width: 49px;
+      height: 16px;
+      background: rgba(242, 195, 166, .78);
+      top: -7px;
+      box-shadow: 0 1px 5px rgba(120,73,70,.1);
+    }
+
+    .photo-frame::before { left: 21px; transform: rotate(-9deg); }
+    .photo-frame::after { right: 21px; transform: rotate(8deg); }
+
+    .photo-frame img {
+      display: block;
+      width: 100%;
+      height: auto;
+      aspect-ratio: 600 / 800;
+      object-fit: cover;
+    }
+
+    .caption {
+      margin: 19px auto 0;
+      color: var(--muted);
+      font-size: 1.02rem;
+      font-style: italic;
+    }
+
+    .love-area {
+      text-align: center;
+      padding: 45px 0 18px;
+    }
+
+    .love-area p {
+      margin: 0 0 15px;
+      color: var(--muted);
+      font-size: .98rem;
+    }
+
+    .love-button {
+      appearance: none;
+      border: 0;
+      border-radius: 999px;
+      min-width: 238px;
+      min-height: 70px;
+      padding: 20px 38px;
+      color: white;
+      background: linear-gradient(135deg, var(--rose) 0%, var(--rose-dark) 100%);
+      box-shadow: 0 12px 26px rgba(182,77,98,.32), inset 0 1px 0 rgba(255,255,255,.35);
+      font: 700 1.34rem Georgia, serif;
+      cursor: pointer;
+      touch-action: manipulation;
+      transition: transform .15s ease, box-shadow .15s ease;
+    }
+
+    .love-button:active,
+    .love-button.is-pressed { transform: scale(.95); box-shadow: 0 5px 13px rgba(182,77,98,.22); }
+    .love-button:focus-visible { outline: 3px solid #6f9da0; outline-offset: 4px; }
+
+    .love-button-wrap {
+      position: relative;
+      display: inline-block;
+      z-index: 1;
+    }
+
+    .burst-layer {
+      position: absolute;
+      inset: -170px;
+      z-index: 3;
+      pointer-events: none;
+      overflow: visible;
+    }
+
+    .footer {
+      margin-top: 17px;
+      text-align: center;
+      color: rgba(94,63,60,.62);
+      font: .78rem/1.4 system-ui, sans-serif;
+    }
+
+    .burst {
+      position: absolute;
+      z-index: 4;
+      pointer-events: none;
+      left: 50%;
+      top: 50%;
+      font-size: var(--size);
+      line-height: 1;
+      will-change: transform, opacity;
+      animation: fly var(--duration) cubic-bezier(.16,.75,.25,1) forwards;
+      transform: translate(-50%, -50%) rotate(0deg);
+    }
+
+    @keyframes fly {
+      0% { opacity: 0; transform: translate(-50%, -50%) scale(.3) rotate(0deg); }
+      12% { opacity: 1; }
+      100% { opacity: 0; transform: translate(calc(-50% + var(--dx)), calc(-50% + var(--dy))) scale(1.3) rotate(var(--rotation)); }
+    }
+
+    @keyframes letterFade {
+      from { opacity: 0; transform: translateY(10px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(22px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      html { scroll-behavior: auto; }
+      *, *::before, *::after { animation-duration: .01ms !important; transition-duration: .01ms !important; }
+    }
+  </style>
+</head>
+<body>
+  <main class="page">
+    <p class="top-note">Hecha con amor, puntada por puntada</p>
+
+    <header class="hero">
+      <div class="machine" aria-hidden="true">🧵</div>
+      <h1>Para vos, mamá</h1>
+      <p class="subtitle">Una pequeña carta para la persona que siempre fue mi hogar.</p>
+    </header>
+
+    <article class="letter" aria-label="Carta para mamá" aria-live="polite">
+      <div class="letter-step active">
+        <p class="salutation">Querida mamá:</p>
+        <p>Te hago esta carta desde el corazón para decirte que no me alcanzan las palabras para expresar cuánto te amo y lo feliz que me hacés con tus comidas, nuestras charlas, tu compañía y ahora también con la forma en que estás sobrellevando mi relación actual.</p>
+      </div>
+
+      <div class="letter-step">
+        <p>Sé que fuiste mi mamá y mi papá, y que no debe haber sido fácil hacerlo sola siendo tan joven. Aun así, seguiste adelante, y de verdad aprendí de vos valores como nunca rendirme. Siempre te vi como mi heroína.</p>
+      </div>
+
+      <div class="letter-step">
+        <p>También sé que a veces te pesa pensar en cómo me educaste, por la forma en que te educó la abuela. No te culpo: hacías lo que podías con las herramientas que tenías. Por eso me haría muy feliz que no sigas pensando que podrías haberlo hecho mejor, porque con todo lo que hiciste soy quien soy hoy y no podría ser más feliz.</p>
+      </div>
+
+      <div class="letter-step">
+        <p>No me gusta decirte “te perdono”, porque nunca sentí que hubiera algo que perdonarte. Obviamente, en su momento algunas cosas me dolieron, pero después entendí que siempre hiciste lo mejor que pudiste. Y gracias a vos soy como soy hoy.</p>
+      </div>
+
+      <div class="letter-step">
+        <p>Te amo y siempre te voy a amar. Gracias por todas las veces que hiciste lo que pudiste por mí. Sos mi heroína.</p>
+        <p class="signature">Tu hijo,<br />Nacho</p>
+      </div>
+
+      <div class="next-area">
+        <span class="progress" id="progress">1 de 5</span>
+        <button class="next-button" id="next-button" type="button">Siguiente →</button>
+      </div>
+    </article>
+
+    <section class="photo-section" id="photo-section" aria-labelledby="photo-title" hidden>
+      <h2 id="photo-title">PARA LA MEJOR MAMÁ DEL MUNDO</h2>
+      <figure class="photo-frame">
+        <img src="501304997_9821354817933851_5942677274495856883_n.jpg" alt="Nacho junto a su mamá, sonriendo" />
+      </figure>
+      <p class="caption">Gracias por ser mi mamá y mi heroína.</p>
+    </section>
+
+    <section class="love-area" id="love-area" hidden>
+      <p>Cuando llegues al final, tocá este botón:</p>
+      <div class="love-button-wrap">
+        <div class="burst-layer" aria-hidden="true"></div>
+        <button class="love-button" type="button" aria-label="Mostrar una explosión de amor">Te amo, mamá</button>
+      </div>
+    </section>
+
+    <footer class="footer">Feliz día, mamá · Con todo mi amor</footer>
+  </main>
+
+  <script>
+    const nextButton = document.querySelector('#next-button');
+    const progress = document.querySelector('#progress');
+    const steps = [...document.querySelectorAll('.letter-step')];
+    const photoSection = document.querySelector('#photo-section');
+    const loveArea = document.querySelector('#love-area');
+    const button = document.querySelector('.love-button');
+    const burstLayer = document.querySelector('.burst-layer');
+    const emojis = ['💖', '💕', '💗', '🌸', '✨', '🧵', '🫶', '💐', '❤️'];
+    let currentStep = 0;
+    let lastBurstAt = 0;
+
+    nextButton.addEventListener('click', () => {
+      if (currentStep < steps.length - 1) {
+        currentStep += 1;
+        steps[currentStep].classList.add('active');
+        progress.textContent = `${currentStep + 1} de ${steps.length}`;
+        if (currentStep === steps.length - 1) {
+        nextButton.textContent = 'Tocá acá 💖';
+        }
+        window.setTimeout(() => steps[currentStep].scrollIntoView({ behavior: 'smooth', block: 'center' }), 80);
+        return;
+      }
+
+      nextButton.hidden = true;
+      progress.hidden = true;
+      photoSection.hidden = false;
+      loveArea.hidden = false;
+      photoSection.classList.add('reveal');
+      window.setTimeout(() => loveArea.classList.add('reveal'), 180);
+      window.setTimeout(() => photoSection.scrollIntoView({ behavior: 'smooth', block: 'start' }), 280);
+    });
+
+    function createBurst() {
+      const amount = 40;
+
+      for (let i = 0; i < amount; i += 1) {
+        const emoji = document.createElement('span');
+        const angle = Math.random() * Math.PI * 2;
+        const distance = 70 + Math.random() * 160;
+        emoji.className = 'burst';
+        emoji.textContent = emojis[Math.floor(Math.random() * emojis.length)];
+        emoji.style.setProperty('--dx', `${Math.cos(angle) * distance}px`);
+        emoji.style.setProperty('--dy', `${Math.sin(angle) * distance - 45}px`);
+        emoji.style.setProperty('--size', `${1.05 + Math.random() * .75}rem`);
+        emoji.style.setProperty('--duration', `${850 + Math.random() * 700}ms`);
+        emoji.style.setProperty('--rotation', `${-55 + Math.random() * 110}deg`);
+        burstLayer.appendChild(emoji);
+        emoji.addEventListener('animationend', () => emoji.remove(), { once: true });
+      }
+    }
+
+    function triggerLove() {
+      const now = Date.now();
+      if (now - lastBurstAt < 250) return;
+      lastBurstAt = now;
+      button.classList.add('is-pressed');
+      createBurst();
+      button.animate(
+        [
+          { transform: 'scale(1)' },
+          { transform: 'scale(1.08)' },
+          { transform: 'scale(1)' }
+        ],
+        { duration: 360, easing: 'ease-out' }
+      );
+      window.setTimeout(() => button.classList.remove('is-pressed'), 180);
+    }
+
+    button.addEventListener('pointerdown', triggerLove);
+    button.addEventListener('click', triggerLove);
+  </script>
+</body>
+</html>
